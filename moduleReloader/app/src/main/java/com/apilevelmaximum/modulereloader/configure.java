@@ -1,6 +1,10 @@
 package com.apilevelmaximum.modulereloader;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
+import android.os.SystemClock;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -28,7 +32,13 @@ public class configure extends AppCompatActivity {
         EditText textEntry= (EditText) findViewById(R.id.editText);
         EditText cmdT= (EditText) findViewById(R.id.commandText);
         saveParams(textEntry.getText().toString(),cmdT.getText().toString());
-        this.startService(new Intent(getApplicationContext(),backgroundservice.class));
+        Context context= getApplicationContext();
+        AlarmManager alarmMgr=(AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
+        PendingIntent alarmIntent = PendingIntent.getBroadcast(context, 0, new Intent(getApplicationContext(),backgroundservice.class), 0);
+        alarmMgr.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP,
+                SystemClock.elapsedRealtime() + AlarmManager.INTERVAL_HALF_HOUR,
+                AlarmManager.INTERVAL_HALF_HOUR, alarmIntent);
+        //this.startService(new Intent(getApplicationContext(),backgroundservice.class));
     }
     private void saveParams(String module, String command){
         try{

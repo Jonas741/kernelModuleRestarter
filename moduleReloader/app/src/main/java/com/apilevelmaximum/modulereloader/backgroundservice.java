@@ -36,16 +36,9 @@ public class backgroundservice extends IntentService {
         try {
             load();
         }
-        catch (IOException e){
+        catch (IOException ignored){
 
         }
-        Timer t= new Timer();
-        t.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                Tick();
-            }
-        },25,50);
     }
     private void load() throws IOException {
         String filename="module";
@@ -70,6 +63,7 @@ public class backgroundservice extends IntentService {
     @Override
     protected void onHandleIntent(@Nullable Intent intent) {
         cont=getApplicationContext();
+        Tick();
     }
     public boolean isScreenOn(Context context) {
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT_WATCH) {
