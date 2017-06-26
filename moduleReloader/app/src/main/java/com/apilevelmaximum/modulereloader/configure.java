@@ -13,6 +13,7 @@ import android.widget.EditText;
 
 import java.io.FileOutputStream;
 import java.io.StreamCorruptedException;
+import java.util.Calendar;
 
 public class configure extends AppCompatActivity {
 
@@ -34,10 +35,9 @@ public class configure extends AppCompatActivity {
         saveParams(textEntry.getText().toString(),cmdT.getText().toString());
         Context context= getApplicationContext();
         AlarmManager alarmMgr=(AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
-        PendingIntent alarmIntent = PendingIntent.getBroadcast(context, 0, new Intent(getApplicationContext(),backgroundservice.class), 0);
-        alarmMgr.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP,
-                SystemClock.elapsedRealtime() + AlarmManager.INTERVAL_HALF_HOUR,
-                AlarmManager.INTERVAL_HALF_HOUR, alarmIntent);
+        PendingIntent alarmIntent = PendingIntent.getService(context, 0, new Intent(getApplicationContext(),backgroundservice.class), 0);
+        long trigger = System.currentTimeMillis() + (100);
+        alarmMgr.setInexactRepeating(AlarmManager.RTC, trigger,1000*60, alarmIntent);
         //this.startService(new Intent(getApplicationContext(),backgroundservice.class));
     }
     private void saveParams(String module, String command){

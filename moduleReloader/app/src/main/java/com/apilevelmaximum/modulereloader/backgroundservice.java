@@ -7,7 +7,9 @@ import android.hardware.display.DisplayManager;
 import android.os.Build;
 import android.os.PowerManager;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.Display;
+import android.widget.Toast;
 
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
@@ -33,12 +35,7 @@ public class backgroundservice extends IntentService {
     public backgroundservice() {
         super("Module_ReStarter");
         module ="";
-        try {
-            load();
-        }
-        catch (IOException ignored){
-
-        }
+        command="";
     }
     private void load() throws IOException {
         String filename="module";
@@ -63,7 +60,14 @@ public class backgroundservice extends IntentService {
     @Override
     protected void onHandleIntent(@Nullable Intent intent) {
         cont=getApplicationContext();
-        Tick();
+        try {
+            load();
+        }
+        catch (IOException ignored){
+
+        }
+        Log.d("MUKODIK","ORULUNK");
+        //Tick();
     }
     public boolean isScreenOn(Context context) {
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT_WATCH) {
