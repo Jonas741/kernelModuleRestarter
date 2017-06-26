@@ -1,7 +1,6 @@
 package com.apilevelmaximum.modulereloader;
 
 import android.app.IntentService;
-import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.hardware.display.DisplayManager;
@@ -13,7 +12,6 @@ import android.view.Display;
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Timer;
@@ -30,11 +28,11 @@ public class backgroundservice extends IntentService {
      * @param name Used to name the worker thread, important only for debugging.
      */
     private Context cont;
-    private String loaded;
+    private String module;
+    private String command;
     public backgroundservice() {
         super("Module_ReStarter");
-        cont=getApplicationContext();
-        loaded="";
+        module ="";
         try {
             load();
         }
@@ -47,7 +45,7 @@ public class backgroundservice extends IntentService {
             public void run() {
                 Tick();
             }
-        },0,50);
+        },25,50);
     }
     private void load() throws IOException {
         String filename="module";
@@ -55,7 +53,15 @@ public class backgroundservice extends IntentService {
         byte[] buffer= new byte[1024]; int len;
         while ((len=fis.read(buffer))>0)
         {
-            loaded+=new String(buffer,0,len);
+            module +=new String(buffer,0,len);
+        }
+        fis.close();
+        filename="command";
+        fis= getApplicationContext().openFileInput(filename);
+        buffer= new byte[1024];
+        while ((len=fis.read(buffer))>0)
+        {
+            command +=new String(buffer,0,len);
         }
         fis.close();
 
@@ -63,7 +69,7 @@ public class backgroundservice extends IntentService {
 
     @Override
     protected void onHandleIntent(@Nullable Intent intent) {
-
+        cont=getApplicationContext();
     }
     public boolean isScreenOn(Context context) {
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT_WATCH) {
@@ -84,8 +90,8 @@ public class backgroundservice extends IntentService {
     private void Tick(){
         if (!isScreenOn(cont)) {
             String result=sudoForResult("lsmod");
-            if (!result.contains(loaded)){
-                sudoForResult("insmod "+loaded);
+            if (!result.contains(module)){
+                sudoForResult(command);
             }
         }
     }

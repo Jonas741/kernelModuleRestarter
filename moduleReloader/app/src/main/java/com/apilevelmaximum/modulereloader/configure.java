@@ -8,6 +8,7 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import java.io.FileOutputStream;
+import java.io.StreamCorruptedException;
 
 public class configure extends AppCompatActivity {
 
@@ -25,13 +26,23 @@ public class configure extends AppCompatActivity {
     }
     private void startProcess(){
         EditText textEntry= (EditText) findViewById(R.id.editText);
-        saveParams(textEntry.getText().toString());
+        EditText cmdT= (EditText) findViewById(R.id.commandText);
+        saveParams(textEntry.getText().toString(),cmdT.getText().toString());
         this.startService(new Intent(getApplicationContext(),backgroundservice.class));
     }
-    private void saveParams(String module){
+    private void saveParams(String module, String command){
         try{
             FileOutputStream fos = getApplicationContext().openFileOutput("module",MODE_PRIVATE);
             fos.write(module.getBytes());
+            fos.close();
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
+
+        try{
+            FileOutputStream fos = getApplicationContext().openFileOutput("command",MODE_PRIVATE);
+            fos.write(command.getBytes());
             fos.close();
         }
         catch(Exception e){

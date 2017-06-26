@@ -10,7 +10,7 @@
         android:id="@+id/Description"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="If kernel module isn't loaded, the program will try to load it in the background."
+        android:text="Kernel Module Name"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
@@ -29,12 +29,30 @@
         android:contentDescription="KernelModuleName"
         android:layout_below="@id/Description"
         />
+    <TextView
+        android:id="@+id/loadCommandText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/editText"
+        android:layout_margin="10dp"
+        android:text="Command to load module."
+        />
+    <EditText
+    <EditText
+        android:id="@+id/commandText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="text"
+        android:layout_below="@+id/loadCommandText"
+        android:layout_alignLeft="@+id/editText"
+        android:layout_alignStart="@+id/editText"
+        />
     <Button
         android:id="@+id/ok"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAlignment="center"
-        android:layout_below="@+id/editText"
+        android:layout_below="@+id/command"
         android:text="OK"
         android:layout_centerHorizontal="true" />
 
