@@ -67,7 +67,7 @@ public class backgroundservice extends IntentService {
 
         }
         Log.d("MUKODIK","ORULUNK");
-        //Tick();
+        Tick();
     }
     public boolean isScreenOn(Context context) {
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT_WATCH) {

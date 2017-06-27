@@ -11,12 +11,14 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.StreamCorruptedException;
 import java.util.Calendar;
 
 public class configure extends AppCompatActivity {
-
+private String module,command;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,6 +30,32 @@ public class configure extends AppCompatActivity {
                 startProcess();
             }
         });
+        try {
+            load();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        ((EditText)findViewById(R.id.commandText)).setText(command);
+        ((EditText)findViewById(R.id.editText)).setText(module);
+    }
+    private void load() throws IOException {
+        String filename="module";
+        FileInputStream fis= getApplicationContext().openFileInput(filename);
+        byte[] buffer= new byte[1024]; int len;
+        while ((len=fis.read(buffer))>0)
+        {
+            module +=new String(buffer,0,len);
+        }
+        fis.close();
+        filename="command";
+        fis= getApplicationContext().openFileInput(filename);
+        buffer= new byte[1024];
+        while ((len=fis.read(buffer))>0)
+        {
+            command +=new String(buffer,0,len);
+        }
+        fis.close();
+
     }
     private void startProcess(){
         EditText textEntry= (EditText) findViewById(R.id.editText);
@@ -38,7 +66,8 @@ public class configure extends AppCompatActivity {
         PendingIntent alarmIntent = PendingIntent.getService(context, 0, new Intent(getApplicationContext(),backgroundservice.class), 0);
         long trigger = System.currentTimeMillis() + (100);
         alarmMgr.setInexactRepeating(AlarmManager.RTC, trigger,1000*60, alarmIntent);
-        //this.startService(new Intent(getApplicationContext(),backgroundservice.class));
+        // Pause app.
+        onPause();
     }
     private void saveParams(String module, String command){
         try{

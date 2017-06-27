@@ -10,8 +10,8 @@ import java.net.Socket;
  * Created by Yallntin on 25/06/2017.
  */
 
-public class Closer {
-    public static void closeSilently(Object... xs) {
+class Closer {
+    static void closeSilently(Object... xs) {
         // Note: on Android API levels prior to 19 Socket does not implement Closeable
         for (Object x : xs) {
             if (x != null) {
