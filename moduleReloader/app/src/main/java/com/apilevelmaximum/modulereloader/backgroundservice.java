@@ -54,6 +54,7 @@ public class backgroundservice extends IntentService {
             command +=new String(buffer,0,len);
         }
         fis.close();
+        Log.d("MUKODIK","MOdule Info: "+module);
 
     }
 
@@ -66,7 +67,7 @@ public class backgroundservice extends IntentService {
         catch (IOException ignored){
 
         }
-        Log.d("MUKODIK","ORULUNK");
+        Log.d("MUKODIK","Intent Handle rész");
         Tick();
     }
     public boolean isScreenOn(Context context) {
@@ -87,10 +88,13 @@ public class backgroundservice extends IntentService {
     }
     private void Tick(){
         if (!isScreenOn(cont)) {
+            Log.d("MUKODIK","Screen off, fut a metódus.");
             String result=sudoForResult("lsmod");
             if (!result.contains(module)){
                 sudoForResult(command);
             }
+        }else{
+            Log.d("MUKODIK","Screen on, nem fut a metódus.");
         }
     }
     public static String sudoForResult(String...strings) {
@@ -125,7 +129,7 @@ public class backgroundservice extends IntentService {
     public static String readFully(InputStream is) throws IOException {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         byte[] buffer = new byte[1024];
-        int length = 0;
+        int length;
         while ((length = is.read(buffer)) != -1) {
             baos.write(buffer, 0, length);
         }

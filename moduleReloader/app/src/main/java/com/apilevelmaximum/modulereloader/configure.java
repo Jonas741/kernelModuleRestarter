@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.SystemClock;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -55,6 +56,12 @@ private String module,command;
             command +=new String(buffer,0,len);
         }
         fis.close();
+        while (module.contains("null")){
+            module=module.replaceFirst("null","");
+        }
+        while (command.contains("null")){
+            command=command.replaceFirst("null","");
+        }
 
     }
     private void startProcess(){
@@ -66,12 +73,14 @@ private String module,command;
         PendingIntent alarmIntent = PendingIntent.getService(context, 0, new Intent(getApplicationContext(),backgroundservice.class), 0);
         long trigger = System.currentTimeMillis() + (100);
         alarmMgr.setInexactRepeating(AlarmManager.RTC, trigger,1000*60, alarmIntent);
-        // Pause app.
-        onPause();
     }
     private void saveParams(String module, String command){
+        if (module==null||command==null){
+            return;
+        }
         try{
             FileOutputStream fos = getApplicationContext().openFileOutput("module",MODE_PRIVATE);
+            Log.d("MUKODIK", module);
             fos.write(module.getBytes());
             fos.close();
         }

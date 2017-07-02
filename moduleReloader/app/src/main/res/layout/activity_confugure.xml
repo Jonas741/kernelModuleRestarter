@@ -54,6 +54,13 @@
         android:layout_below="@+id/commandText"
         android:text="OK"
         android:layout_centerHorizontal="true" />
+    <TextView
+        android:id="@+id/help"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/ok"
+        android:layout_margin="10dp"
+        android:text="If command/module name contains string:null it will be replaced by empty string."/>
 
 </RelativeLayout>
 
