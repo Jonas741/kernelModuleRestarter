@@ -61,12 +61,6 @@ public class backgroundservice extends IntentService {
     @Override
     protected void onHandleIntent(@Nullable Intent intent) {
         cont=getApplicationContext();
-        try {
-            load();
-        }
-        catch (IOException ignored){
-
-        }
         Log.d("MUKODIK","Intent Handle rész");
         Tick();
     }
@@ -88,6 +82,12 @@ public class backgroundservice extends IntentService {
     }
     private void Tick(){
         if (!isScreenOn(cont)) {
+            try {
+                load();
+            }
+            catch (IOException ignored){
+
+            }
             Log.d("MUKODIK","Screen off, fut a metódus.");
             String result=sudoForResult("lsmod");
             if (!result.contains(module)){
